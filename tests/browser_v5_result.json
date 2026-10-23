@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "completed": true,
+    "aborted": false,
+    "score": 88,
+    "turns": 0,
+    "weedHit": 0,
+    "elapsed": 17.55
+  },
+  "turn": {
+    "completed": true,
+    "aborted": false,
+    "score": 99,
+    "turns": 1,
+    "weedHit": 0,
+    "elapsed": 11.3
+  },
+  "vision": {
+    "completed": true,
+    "aborted": false,
+    "score": 69,
+    "turns": 0,
+    "weedHit": 11,
+    "elapsed": 25.5
+  },
+  "integrated": {
+    "completed": true,
+    "aborted": false,
+    "score": 73,
+    "turns": 4,
+    "weedHit": 45,
+    "elapsed": 111.4
+  },
+  "advancedNav": {
+    "completed": true,
+    "aborted": false,
+    "abortReason": "",
+    "planner": {
+      "ok": true,
+      "visited": 1157,
+      "pathPoints": 8,
+      "reason": null
+    }
+  },
+  "advancedSpray": {
+    "completed": true,
+    "aborted": false,
+    "spray": {
+      "sprayCount": 8,
+      "failed": 15,
+      "cropSafetyBlocks": 15,
+      "appliedL": 0.0104,
+      "remainingL": 11.989599999999996,
+      "pending": 0,
+      "delayS": 0.35,
+      "radiusM": 0.35
+    },
+    "weedHit": 8
+  },
+  "page_errors": [],
+  "fallback_depth_message": "RGB-D不可用：请先在支持 WebGL 与 Three.js 的浏览器中加载三维农田。",
+  "arm_ik": "已迁移至独立实验5"
+}

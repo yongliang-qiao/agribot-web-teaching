@@ -1,0 +1,40 @@
+{
+  "unripe_message": "IK/采摘条件不满足：作物保护：禁止采摘未成熟果实",
+  "result": {
+    "score": 100,
+    "picked": 8,
+    "ripe": 8,
+    "unripe": 4,
+    "unripeDamaged": 0,
+    "failed": 0,
+    "elapsed": 40.32,
+    "meanPoseError": 0,
+    "maxPoseError": 0,
+    "completed": true,
+    "components": [
+      {
+        "name": "成熟果实采摘",
+        "points": 65,
+        "max": 65
+      },
+      {
+        "name": "未成熟果实保护",
+        "points": 15,
+        "max": 15
+      },
+      {
+        "name": "末端定位精度",
+        "points": 10,
+        "max": 10
+      },
+      {
+        "name": "任务完成",
+        "points": 10,
+        "max": 10
+      }
+    ]
+  },
+  "render_mode": "2D",
+  "main_has_fruit_link": true,
+  "page_errors": []
+}

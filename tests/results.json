@@ -1,0 +1,51 @@
+{
+  "nav": {
+    "completed": true,
+    "turns": 4,
+    "rmse": 0.1474,
+    "visionValidPct": 88.2,
+    "hit": 50,
+    "score": 75
+  },
+  "turn": {
+    "completed": true,
+    "turns": 4,
+    "rmse": 0.1474,
+    "visionValidPct": 88.2,
+    "hit": 50,
+    "score": 97
+  },
+  "vision": {
+    "completed": true,
+    "turns": 4,
+    "rmse": 0.1474,
+    "visionValidPct": 88.2,
+    "hit": 50,
+    "score": 89
+  },
+  "integrated": {
+    "completed": true,
+    "turns": 4,
+    "rmse": 0.1474,
+    "visionValidPct": 88.2,
+    "hit": 50,
+    "score": 86
+  },
+  "onnx_without_model": {
+    "weedHit": 0,
+    "detector": "onnx",
+    "onnxLoaded": false,
+    "score": null
+  },
+  "gain_comparison": [
+    [
+      0.3,
+      0.1
+    ],
+    [
+      3.0,
+      1.5716
+    ]
+  ],
+  "browser_errors": []
+}

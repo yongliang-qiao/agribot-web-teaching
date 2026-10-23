@@ -1,0 +1,102 @@
+{
+  "nav": {
+    "elapsed": 17.55,
+    "rmse": 0.0699,
+    "turns": 0,
+    "weedHit": 0,
+    "TP": 0,
+    "FP": 0,
+    "FN": 0,
+    "F1": 0,
+    "cropSprayRisk": 0,
+    "score": 88,
+    "seed": 20261022
+  },
+  "turn": {
+    "elapsed": 11.3,
+    "rmse": 0.0544,
+    "turns": 1,
+    "weedHit": 0,
+    "TP": 0,
+    "FP": 0,
+    "FN": 0,
+    "F1": 0,
+    "cropSprayRisk": 0,
+    "score": 99,
+    "seed": 20261022
+  },
+  "vision": {
+    "elapsed": 25.5,
+    "rmse": 0.0924,
+    "turns": 0,
+    "weedHit": 11,
+    "TP": 11,
+    "FP": 12,
+    "FN": 0,
+    "F1": 0.6471,
+    "cropSprayRisk": 12,
+    "score": 69,
+    "seed": 20261022
+  },
+  "integrated": {
+    "elapsed": 111.4,
+    "rmse": 0.1231,
+    "turns": 4,
+    "weedHit": 45,
+    "TP": 55,
+    "FP": 43,
+    "FN": 0,
+    "F1": 0.719,
+    "cropSprayRisk": 53,
+    "score": 73,
+    "seed": 20261022
+  },
+  "reproducibility": "identical metrics, seed, parameters, fixed step",
+  "confidence_sensitivity": [
+    {
+      "threshold": 0.25,
+      "tp": 11,
+      "fp": 25,
+      "fn": 0,
+      "f1": 0.4681
+    },
+    {
+      "threshold": 0.8,
+      "tp": 4,
+      "fp": 0,
+      "fn": 7,
+      "f1": 0.5333
+    }
+  ],
+  "turn_sensitivity": [
+    {
+      "radius": 1.05,
+      "exitError": 0.033,
+      "score": 99
+    },
+    {
+      "radius": 1.35,
+      "exitError": 0.6329,
+      "score": 75
+    }
+  ],
+  "seed_sensitivity": [
+    {
+      "seed": 20261022,
+      "tp": 11,
+      "fp": 12,
+      "score": 69
+    },
+    {
+      "seed": 20261023,
+      "tp": 11,
+      "fp": 12,
+      "score": 64
+    }
+  ],
+  "missing_onnx_prevention": true,
+  "saved_records": 4,
+  "csv_export": true,
+  "markdown_export": true,
+  "page_errors": []
+}

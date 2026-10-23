@@ -27,13 +27,14 @@ export function estimateRows(rgba,w,h){const scores=new Float64Array(w);let gree
  // camera faces +robot Z; screen-left means desired positive yaw (right turn in world x-z map).
  const opticalErr=ok?clamp((w/2-center)/(w*.24),-1.8,1.8):0;
  return {ok,left:peaks[0]?.x??null,right:peaks[1]?.x??null,center,opticalErr,greenCount,confidence:ok?clamp(Math.min(peaks[0].power,peaks[1].power)/90,0,1):0};}
-export function rowMotion(s,dt,params){if(s.completed||s.abortReason)return;const v=params.speed; s.time+=dt;
+export function rowMotion(s,dt,params){if(s.completed||s.abortReason)return;const v=params.actualSpeed??params.speed; s.time+=dt;
  if(s.phase==='row'){
   // Controller ONLY sees the latest pixel-derived optical error (no true lane x in steering command).
   const desiredBase=(s.lane%2)*Math.PI;
   const yawErr=wrap(desiredBase-s.theta);
   const optical=s.visionFound?s.visionErr:0;
-  const steering=clamp(params.gain*optical*.24/Math.max(.6,params.look)+.9*yawErr,-.49,.49);s.steering=steering;
+  const visualSteering=params.gain*optical*.24/Math.max(.6,params.look)+.9*yawErr;
+  const steering=clamp(params.plannerSteering===undefined?visualSteering:visualSteering*(1-(params.plannerWeight??.45))+params.plannerSteering*(params.plannerWeight??.45),-.49,.49);s.steering=steering;
   s.theta+=v*Math.tan(steering)*dt/WHEELBASE;
   s.x+=v*Math.sin(s.theta)*dt;s.z+=v*Math.cos(s.theta)*dt;
   let error=s.x-laneX(s.lane);s.sqErr+=error*error;s.sampleN++;s.maxErr=Math.max(s.maxErr,Math.abs(error));

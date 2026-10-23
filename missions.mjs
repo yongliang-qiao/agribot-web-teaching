@@ -37,7 +37,7 @@ export function demoDetectAndSpray(s,field,params){if(s.phase!=='row'||(s.mode!=
   if(predicted){let inReach=Math.abs(o.x-s.x)<1.1, nearCrop=field.crops.some(c=>Math.hypot(c.x-o.x,c.z-o.z)<params.spray+.03);
    if(inReach){m.sprayEvents++;if(!isWeed){m.cropSprayed++;s.falseSpray++;events.push({type:'crop',x:o.x,z:o.z});}
     else if(nearCrop){m.cropSprayed++;s.falseSpray++;events.push({type:'risk',x:o.x,z:o.z});}
-    else{o.hit=true;s.hit++;events.push({type:'hit',x:o.x,z:o.z});}
+    else{if(!params.deferSpray){o.hit=true;s.hit++;}events.push({type:'hit',x:o.x,z:o.z,weedId:o.id});}
    }
   }
  }

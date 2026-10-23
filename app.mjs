@@ -1,12 +1,13 @@
 import {ROWS,SPACE,LENGTH,HALF,laneX,clamp,wrap,makeField,initState,estimateRows,rowMotion,recordVisual,teachingDemoSpray,estimateScore,boundingBoxesFromYolo,randSeed} from './core.mjs';
 import {installVegetation,buildRover3D} from './scene_realism.mjs';
 import {MISSIONS,createMission,advanceMission,demoDetectAndSpray,evaluateMission,progress,counts} from './missions.mjs';
+import {createAdvancedUI} from './advanced_ui.mjs';
 const $=id=>document.getElementById(id);const fmt=(v,n=2)=>Number(v).toFixed(n);
 const cameraCanvas=$('camera'),cameraCtx=cameraCanvas.getContext('2d',{willReadFrequently:true}),vCanvas=$('vision'),vctx=vCanvas.getContext('2d'),plot=$('chart'),pctx=plot.getContext('2d');
 const settings=()=>({speed:+$('speed').value,gain:+$('gain').value,look:+$('look').value,conf:+$('conf').value,spray:+$('spray').value,turnRadius:+$('turnRadius').value});
 const settingNames=['speed','gain','look','conf','spray','turnRadius'];
 let field=makeField(),s=createMission(field,'nav',20261022),records=[],history=[],playing=false,three=null,scene,viewCamera,onboardCamera,renderer,renderTarget,robot,worldCanvas,backend='fallback',plantMeshes=[],weedMeshes=[],marks=[],wheelMeshes=[],nozzleMeshes=[],modelSession=null,modelReady=false,inferenceBusy=false,savedCurrent=false,aiBoxes=[],inferenceCount=0;
-let last=performance.now(),simCarry=0,steps=0,lastCameraStep=-100,previousTestStatus='';
+let last=performance.now(),simCarry=0,steps=0,lastCameraStep=-100,previousTestStatus='',advanced=null;
 function info(msg){s.logs.unshift(`${fmt(s.time,1)}s · ${msg}`);s.logs=s.logs.slice(0,80);$('events').textContent=s.logs.join('\n');}
 function lesson(){return $('lesson').value;}
 function setTask(){const t=MISSIONS[lesson()];$('task').innerHTML=`<b>${t.label}</b><div><b>任务：</b>${t.scope}</div><div><b>操作：</b>${t.procedure}</div><div><b>完成判据：</b>${t.finish}</div><div><b>评分：</b>${t.rubricDesc}</div>`;$('turnRadius').disabled=!['turn','integrated'].includes(lesson());$('spray').disabled=!['vision','integrated'].includes(lesson());$('conf').disabled=!['vision','integrated'].includes(lesson());$('detector').disabled=!['vision','integrated'].includes(lesson());}
@@ -19,7 +20,7 @@ function drawWorldFallback(){if(!worldCanvas)return;const ctx=worldCanvas.getCon
  for(const p of field.weeds){const x=X(p.x),z=Z(p.z);for(let a=0;a<(p.kind==='foxtail'?11:7);a++){const ang=2*Math.PI*a/(p.kind==='foxtail'?11:7);ctx.fillStyle=p.hit?'#b7aa60':(p.kind==='foxtail'?'#a9c74a':'#6d9e3c');ctx.beginPath();ctx.ellipse(x+Math.cos(ang)*5,z+Math.sin(ang)*5,p.kind==='foxtail'?9:6,p.kind==='foxtail'?1.5:3,ang,0,Math.PI*2);ctx.fill();}}
  for(const [x,z,r] of marks){ctx.strokeStyle='#edcf62';ctx.beginPath();ctx.ellipse(X(x),Z(z),r*68,r*40,0,0,Math.PI*2);ctx.stroke();}
  if(history.length>2){ctx.strokeStyle='#e8c778';ctx.lineWidth=3;ctx.beginPath();history.forEach((v,i)=>i?ctx.lineTo(X(v.x),Z(v.z)):ctx.moveTo(X(v.x),Z(v.z)));ctx.stroke();}
- ctx.save();ctx.translate(X(s.x),Z(s.z));ctx.rotate(s.theta);ctx.fillStyle='#273b30';ctx.fillRect(-19,-28,38,56);ctx.fillStyle='#deaa43';ctx.fillRect(-15,-25,30,45);ctx.fillStyle='#478d83';ctx.fillRect(-11,-24,22,13);ctx.fillStyle='#1c2423';for(const x of [-23,16])for(const y of [-21,10])ctx.fillRect(x,y,7,13);ctx.restore();}
+ ctx.save();ctx.translate(X(s.x),Z(s.z));ctx.rotate(s.theta);ctx.fillStyle='#273b30';ctx.fillRect(-19,-28,38,56);ctx.fillStyle='#deaa43';ctx.fillRect(-15,-25,30,45);ctx.fillStyle='#478d83';ctx.fillRect(-11,-24,22,13);ctx.fillStyle='#1c2423';for(const x of [-23,16])for(const y of [-21,10])ctx.fillRect(x,y,7,13);ctx.restore(); advanced?.drawFallback(ctx,X,Z);}
 function syntheticCamera(){const ctx=cameraCtx,W=cameraCanvas.width,H=cameraCanvas.height;ctx.fillStyle='#a0c6d5';ctx.fillRect(0,0,W,110);ctx.fillStyle='#75563f';ctx.fillRect(0,110,W,H-110);
  // Images are rasterized through the same geometric projection expected by the visual controller.
  function projected(wx,wz){const dx=wx-s.x,dz=wz-s.z,forward=dx*Math.sin(s.theta)+dz*Math.cos(s.theta),right=dx*Math.cos(s.theta)-dz*Math.sin(s.theta);if(forward<.2||forward>8)return null;return {x:W/2-right*95/(.5+forward*.28),y:H*1.03-35*forward/(1+forward*.11),scale:1/(.4+forward*.2)};}
@@ -60,6 +61,7 @@ function build3D(){const T=three;scene=new T.Scene();scene.background=new T.Colo
  robot.userData.cameraHeight=vehicle.cameraHeight;robot.userData.cameraForward=vehicle.cameraForward;
  $('sceneStats').textContent=`V3–V5 玉米 ${botanicalStats.plantCount} 株 · 苋类/藜类/狗尾草类形态杂草 ${botanicalStats.weedCount} 株 · 植被三角面约 ${botanicalStats.triangles.toLocaleString()}`;
  renderTarget=new T.WebGLRenderTarget(480,250,{depthBuffer:true});
+ advanced?.setup3D({three:T,scene,onboardCamera,renderer,robot});
  resize();window.addEventListener('resize',resize);backend='three';$('cameraLabel').textContent='真实 Three.js 场景渲染的车载相机（虚拟传感器）';}
 function resize(){if(renderer&&viewCamera){const e=$('world');renderer.setSize(e.clientWidth,e.clientHeight,false);viewCamera.aspect=e.clientWidth/e.clientHeight;viewCamera.updateProjectionMatrix();}}
 function syncRobot(){if(backend!=='three'||!robot)return;robot.position.set(s.x,0,s.z);robot.rotation.y=s.theta;
@@ -70,7 +72,7 @@ function syncRobot(){if(backend!=='three'||!robot)return;robot.position.set(s.x,
 function captureCamera(){if(backend!=='three'){syntheticCamera();return;}try{syncRobot();const F=new three.Vector3(Math.sin(s.theta),0,Math.cos(s.theta));const pos=new three.Vector3(s.x,robot.userData.cameraHeight||1.69,s.z).addScaledVector(F,robot.userData.cameraForward||.72);onboardCamera.position.copy(pos);onboardCamera.lookAt(pos.x+F.x*5,.45,pos.z+F.z*5);onboardCamera.updateMatrixWorld(true);
  renderer.setRenderTarget(renderTarget);renderer.render(scene,onboardCamera);const w=480,h=250,pixels=new Uint8Array(w*h*4);renderer.readRenderTargetPixels(renderTarget,0,0,w,h,pixels);renderer.setRenderTarget(null);
  const image=cameraCtx.createImageData(w,h);for(let y=0;y<h;y++){image.data.set(pixels.subarray((h-y-1)*w*4,(h-y)*w*4),y*w*4);}cameraCtx.putImageData(image,0,0);}catch(e){syntheticCamera();if(!$('cameraLabel').textContent.includes('降级')){$('cameraLabel').textContent='车载合成相机降级（WebGL 像素读取失败）';$('errors').textContent='3D 显示可用，但车载相机帧读取失败，视觉闭环使用合成像素。错误：'+e.message;}}}
-function drawMain(){if(backend==='fallback'){drawWorldFallback();return;}syncRobot();const p=robot.position;const target=new three.Vector3(p.x+10,12.5,p.z+12.5);viewCamera.position.lerp(target,.07);viewCamera.lookAt(p.x,.25,p.z);renderer.setRenderTarget(null);renderer.render(scene,viewCamera);}
+function drawMain(){advanced?.draw();if(backend==='fallback'){drawWorldFallback();return;}syncRobot();const p=robot.position;const target=new three.Vector3(p.x+10,12.5,p.z+12.5);viewCamera.position.lerp(target,.07);viewCamera.lookAt(p.x,.25,p.z);renderer.setRenderTarget(null);renderer.render(scene,viewCamera);}
 // This is used to map an actual ONNX weed detection to a 3D soil coordinate. If it misses the soil, no spray is queued.
 function onnxDetectionToGround(box){if(backend!=='three'||!onboardCamera)return null;const px=box.x+box.w/2,py=box.y+box.h*.88;const raycaster=new three.Raycaster();raycaster.setFromCamera(new three.Vector2(px/240-1,1-py/125),onboardCamera);
  const origin=raycaster.ray.origin,dir=raycaster.ray.direction;if(dir.y>=-.015)return null;const t=(.05-origin.y)/dir.y;if(t<.1||t>7)return null;return {x:origin.x+t*dir.x,z:origin.z+t*dir.z,confidence:box.conf};}
@@ -98,10 +100,14 @@ function validOnnx(){return false;} // must only change after labelled ground-tr
 function grade(){return evaluateMission(s,$('detector').value,validOnnx());}
 function lockParameters(locked){for(const id of ['lesson','seed','speed','gain','look','conf','spray','turnRadius','detector','model']) $(id).disabled=locked; if(!locked)setTask();}
 function advance(dt){if(s.completed||s.abortReason)return;const prevPhase=s.phase,prevTurns=s.turns;
- advanceMission(s,field,dt,settings());
+ const prevPose={x:s.x,z:s.z,theta:s.theta};
+ const extra=advanced?.before(dt)||{};
+ if(s.abortReason){playing=false;syncDashboard();return;}
+ advanceMission(s,field,dt,{...settings(),...extra});
+ advanced?.after(dt,prevPose);
  if(s.phase==='row'&&['vision','integrated'].includes(lesson())){
   if($('detector').value==='demo'){
-   for(const evt of demoDetectAndSpray(s,field,settings())){showSpray(evt.x,evt.z);if(evt.type==='crop')info('教学检测误报：对作物触发喷施');}
+   for(const evt of demoDetectAndSpray(s,field,{...settings(),deferSpray:advanced?.active()||false})){if(advanced?.active())advanced.queueSpray(evt);else showSpray(evt.x,evt.z);if(evt.type==='crop')info('教学检测误报：对作物触发喷施');}
   }else onnxSpray();
  }
  if(s.turns>prevTurns)info(`本实验完成第 ${s.turns} 次连续掉头；末端横向误差 ${fmt(s.metrics.turnExitError??0,3)} m`);
@@ -121,7 +127,7 @@ function syncDashboard(){const g=grade(),m=g.metrics;$('progress').textContent=f
  $('experimentStats').textContent=['vision','integrated'].includes(lesson())?`TP ${m.tp} / FP ${m.fp} / FN ${m.fn} · Precision ${fmt(m.precision)} · Recall ${fmt(m.recall)} · F1 ${fmt(m.f1)} · 作物喷施风险 ${m.cropSprayed}`:lesson()==='turn'?`掉头 ${m.turns} 次 · 出弯横向误差 ${fmt(m.turnExitError,3)} m · 最大单步位移 ${fmt(m.maxStep,3)} m`:`视觉有效 ${fmt(m.visionPct)}% · 最大横向误差 ${fmt(m.maxError,3)} m`;
  drawChart();}
 function drawChart(){const ctx=pctx,w=plot.width=plot.clientWidth*devicePixelRatio,h=plot.height=110*devicePixelRatio;ctx.clearRect(0,0,w,h);ctx.strokeStyle='#2f594c';for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo(0,h*i/4);ctx.lineTo(w,h*i/4);ctx.stroke();}if(history.length<2)return;ctx.strokeStyle='#9fe7b9';ctx.lineWidth=2*devicePixelRatio;ctx.beginPath();const pts=history.slice(-220);pts.forEach((v,i)=>{const xx=i/Math.max(1,pts.length-1)*w,yy=h/2-clamp(v.err,-.8,.8)/1.6*h;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);});ctx.stroke();ctx.fillStyle='#e0f6e8';ctx.font=`${11*devicePixelRatio}px sans-serif`;ctx.fillText('横向偏差 e (m) · ±0.8m',8*devicePixelRatio,14*devicePixelRatio);}
-function result(){const g=grade(),m=g.metrics,p=settings();return {student:$('student').value.trim()||'匿名',mission:s.mode,lesson:MISSIONS[s.mode].label,seed:s.fieldSeed,datetime:new Date().toISOString(),speed:p.speed,Kp:p.gain,lookahead:p.look,turnRadius:p.turnRadius,confidence:p.conf,sprayRadius:p.spray,backend,detector:$('detector').value,modelLoaded:modelReady,modelInferenceFrames:inferenceCount,independentModelValidation:false,gradeType:g.gradeType,completed:s.completed,aborted:!!s.abortReason,elapsed:+fmt(m.elapsed,2),rmse:+fmt(m.rmse,4),maxError:+fmt(m.maxError,4),visionValidPct:+fmt(m.visionPct,1),turns:m.turns,turnExitError:+fmt(m.turnExitError,4),turnArcError:+fmt(m.turnArcError,4),maxStep:+fmt(m.maxStep,4),weedDetected:s.seen,weedHit:s.hit,totalWeeds:m.expectedWeeds,cropSprayRisk:m.cropSprayed,TP:m.tp,FP:m.fp,FN:m.fn,TN:m.tn,precision:+fmt(m.precision,4),recall:+fmt(m.recall,4),F1:+fmt(m.f1,4),score:g.score,rubric:g.rows};}
+function result(){const g=grade(),m=g.metrics,p=settings();return {student:$('student').value.trim()||'匿名',mission:s.mode,lesson:MISSIONS[s.mode].label,seed:s.fieldSeed,datetime:new Date().toISOString(),speed:p.speed,Kp:p.gain,lookahead:p.look,turnRadius:p.turnRadius,confidence:p.conf,sprayRadius:p.spray,backend,detector:$('detector').value,modelLoaded:modelReady,modelInferenceFrames:inferenceCount,independentModelValidation:false,gradeType:g.gradeType,completed:s.completed,aborted:!!s.abortReason,elapsed:+fmt(m.elapsed,2),rmse:+fmt(m.rmse,4),maxError:+fmt(m.maxError,4),visionValidPct:+fmt(m.visionPct,1),turns:m.turns,turnExitError:+fmt(m.turnExitError,4),turnArcError:+fmt(m.turnArcError,4),maxStep:+fmt(m.maxStep,4),weedDetected:s.seen,weedHit:s.hit,totalWeeds:m.expectedWeeds,cropSprayRisk:m.cropSprayed,TP:m.tp,FP:m.fp,FN:m.fn,TN:m.tn,precision:+fmt(m.precision,4),recall:+fmt(m.recall,4),F1:+fmt(m.f1,4),score:g.score,rubric:g.rows,advanced:advanced?.summary()||null};}
 function saveRecords(){try{localStorage.setItem('agribot_lab_v4_records',JSON.stringify(records));}catch(e){info('本地保存失败：'+e.message)}showRecords();}
 function showRecords(){const tbody=$('records');tbody.textContent='';for(const row of records.slice(-18).reverse()){const tr=document.createElement('tr');for(const v of [row.student,MISSIONS[row.mission]?.label||row.lesson,row.seed,row.speed,row.rmse,row.score??'—']){const td=document.createElement('td');td.textContent=v;tr.append(td);}tbody.append(tr);}}
 function download(text,name,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3500);}
@@ -131,7 +137,7 @@ function exportReport(){const r=result(),t=MISSIONS[lesson()],g=grade(),comparis
 function reset(preserveStudent=true){playing=false;lockParameters(false);const oldSeed=s.fieldSeed;
  const newSeed=Math.floor(Number($('seed').value)||20261022)>>>0;$('seed').value=String(newSeed);
  if(backend==='three'){for(const obj of [...scene.children]){if(obj instanceof three.Mesh&&obj.geometry?.type==='RingGeometry')scene.remove(obj);}}
- field=makeField(newSeed);s=createMission(field,lesson(),newSeed);s.logs=[];history=[];marks=[];aiBoxes=[];steps=0;lastCameraStep=-100;simCarry=0;inferenceCount=0;savedCurrent=false;
+ field=makeField(newSeed);s=createMission(field,lesson(),newSeed);s.logs=[];history=[];marks=[];aiBoxes=[];advanced?.reset();steps=0;lastCameraStep=-100;simCarry=0;inferenceCount=0;savedCurrent=false;
  // A new seed must rebuild vegetation; reusing meshes would make 3D pixels disagree with ground truth.
  if(backend==='three'&&oldSeed!==newSeed){window.removeEventListener('resize',resize);renderTarget?.dispose();scene?.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats)m.dispose?.();}});renderer?.dispose();renderer?.domElement?.remove();build3D();}
  setTask();captureCamera();analyzeCamera();syncDashboard();drawMain();$('play').textContent='▶ 开始';$('status').textContent='● 待启动';info(`任务重置：${MISSIONS[lesson()].label} · 种子 ${newSeed}；尚未开始评分`);}
@@ -152,10 +158,10 @@ async function loadThreeModule(){
  try{return await import('./vendor/three.module.js');}
  catch(localError){return await Promise.race([import('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js'),new Promise((_,reject)=>setTimeout(()=>reject(Error('Three.js 无法加载：本地和 CDN 均不可用')),8000))]);}
 }
-async function start(){controls();updateValues();try{records=JSON.parse(localStorage.getItem('agribot_lab_v4_records')||'[]');if(!Array.isArray(records))records=[];}catch{records=[];}showRecords();let err=null;
+async function start(){controls();updateValues();advanced=createAdvancedUI({state:()=>s,field:()=>field,settings,lesson,render:drawMain,showSpray,notify:info,download,result,camera:()=>cameraCanvas,vision:()=>vCanvas});advanced.initControls();try{records=JSON.parse(localStorage.getItem('agribot_lab_v4_records')||'[]');if(!Array.isArray(records))records=[];}catch{records=[];}showRecords();let err=null;
  try{three=await loadThreeModule();build3D();}catch(e){err=e;fallbackWorld();}
  $('errors').textContent=backend==='three'?'Three.js 三维环境已启用。当前相机图像由 WebGL 三维农田渲染并实际进行像素处理。':'Three.js/WebGL 不可用，已切换到 2D 离线教学模式。原因：'+String(err?.message||'未知');
- reset(false);window.__agriTest={getState:()=>({...s}),result,reset,backend:()=>backend,grade,progress:()=>progress(s),
+ reset(false);window.__agriTest={getState:()=>({...s}),result,reset,backend:()=>backend,grade,progress:()=>progress(s),advanced:()=>advanced?.summary(),
  stepN(n=1000){playing=false;lockParameters(true);for(let i=0;i<n&&!s.completed&&!s.abortReason;i++)advance(.05);drawMain();return result();},capture:()=>{captureCamera();return analyzeCamera();},records:()=>records.slice()};
  $('status').textContent='● 待启动';requestAnimationFrame(frame);}
 function frame(now){const delta=Math.min((now-last)/1000,.11);last=now;if(playing){simCarry+=delta*5;let n=0;while(simCarry>=.05&&n++<25&&!s.completed){advance(.05);simCarry-=.05;}}drawMain();requestAnimationFrame(frame);}

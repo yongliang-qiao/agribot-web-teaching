@@ -1,0 +1,319 @@
+{
+  "initial": {
+    "time": 0,
+    "stage": "ready",
+    "busy": false,
+    "finished": false,
+    "fruits": [
+      {
+        "id": "F01",
+        "x": -0.3012,
+        "y": 0.9373,
+        "z": 0.5782,
+        "ripe": true,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F02",
+        "x": -0.2086,
+        "y": 1.0011,
+        "z": 0.6743,
+        "ripe": true,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F03",
+        "x": 0.0615,
+        "y": 1.0667,
+        "z": 0.5506,
+        "ripe": true,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F04",
+        "x": 0.2073,
+        "y": 0.9617,
+        "z": 0.6479,
+        "ripe": true,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F05",
+        "x": 0.3226,
+        "y": 1.0623,
+        "z": 0.5414,
+        "ripe": true,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F06",
+        "x": 0.1416,
+        "y": 1.0141,
+        "z": 0.7128,
+        "ripe": true,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F07",
+        "x": -0.0393,
+        "y": 1.0276,
+        "z": 0.4869,
+        "ripe": true,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F08",
+        "x": 0.2713,
+        "y": 0.958,
+        "z": 0.4677,
+        "ripe": true,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F09",
+        "x": -0.2603,
+        "y": 0.9964,
+        "z": 0.6695,
+        "ripe": false,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F10",
+        "x": 0.3184,
+        "y": 1.0073,
+        "z": 0.6864,
+        "ripe": false,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F11",
+        "x": -0.0852,
+        "y": 0.9939,
+        "z": 0.7194,
+        "ripe": false,
+        "status": "on_plant",
+        "attempts": 0
+      },
+      {
+        "id": "F12",
+        "x": 0.0668,
+        "y": 0.9268,
+        "z": 0.6551,
+        "ripe": false,
+        "status": "on_plant",
+        "attempts": 0
+      }
+    ],
+    "result": {
+      "schema": "edu.jlu.agribot.harvest.v1",
+      "mission": "harvest",
+      "lesson": "实验5 · 果实智能采摘与机械臂逆运动学",
+      "student": "匿名",
+      "seed": 20261023,
+      "params": {
+        "gripWidth": 0.045,
+        "offset": 0,
+        "motionScale": 1
+      },
+      "grade": {
+        "score": 25,
+        "picked": 0,
+        "ripe": 8,
+        "unripe": 4,
+        "unripeDamaged": 0,
+        "failed": 0,
+        "elapsed": 0,
+        "meanPoseError": 0,
+        "maxPoseError": 0,
+        "completed": false,
+        "components": [
+          {
+            "name": "成熟果实采摘",
+            "points": 0,
+            "max": 65
+          },
+          {
+            "name": "未成熟果实保护",
+            "points": 15,
+            "max": 15
+          },
+          {
+            "name": "末端定位精度",
+            "points": 10,
+            "max": 10
+          },
+          {
+            "name": "任务完成",
+            "points": 0,
+            "max": 10
+          }
+        ]
+      },
+      "completed": false,
+      "fruits": [
+        {
+          "id": "F01",
+          "x": -0.3012,
+          "y": 0.9373,
+          "z": 0.5782,
+          "ripe": true,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F02",
+          "x": -0.2086,
+          "y": 1.0011,
+          "z": 0.6743,
+          "ripe": true,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F03",
+          "x": 0.0615,
+          "y": 1.0667,
+          "z": 0.5506,
+          "ripe": true,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F04",
+          "x": 0.2073,
+          "y": 0.9617,
+          "z": 0.6479,
+          "ripe": true,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F05",
+          "x": 0.3226,
+          "y": 1.0623,
+          "z": 0.5414,
+          "ripe": true,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F06",
+          "x": 0.1416,
+          "y": 1.0141,
+          "z": 0.7128,
+          "ripe": true,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F07",
+          "x": -0.0393,
+          "y": 1.0276,
+          "z": 0.4869,
+          "ripe": true,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F08",
+          "x": 0.2713,
+          "y": 0.958,
+          "z": 0.4677,
+          "ripe": true,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F09",
+          "x": -0.2603,
+          "y": 0.9964,
+          "z": 0.6695,
+          "ripe": false,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F10",
+          "x": 0.3184,
+          "y": 1.0073,
+          "z": 0.6864,
+          "ripe": false,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F11",
+          "x": -0.0852,
+          "y": 0.9939,
+          "z": 0.7194,
+          "ripe": false,
+          "status": "on_plant",
+          "attempts": 0
+        },
+        {
+          "id": "F12",
+          "x": 0.0668,
+          "y": 0.9268,
+          "z": 0.6551,
+          "ripe": false,
+          "status": "on_plant",
+          "attempts": 0
+        }
+      ],
+      "events": [],
+      "trajectoryFrames": 0,
+      "score": 25,
+      "elapsed": 0,
+      "backend": "2D",
+      "datetime": "2026-10-23T08:27:18.783Z"
+    }
+  },
+  "unripe_message": "IK/采摘条件不满足：作物保护：禁止采摘未成熟果实",
+  "result": {
+    "score": 100,
+    "picked": 8,
+    "ripe": 8,
+    "unripe": 4,
+    "unripeDamaged": 0,
+    "failed": 0,
+    "elapsed": 40.32,
+    "meanPoseError": 0,
+    "maxPoseError": 0,
+    "completed": true,
+    "components": [
+      {
+        "name": "成熟果实采摘",
+        "points": 65,
+        "max": 65
+      },
+      {
+        "name": "未成熟果实保护",
+        "points": 15,
+        "max": 15
+      },
+      {
+        "name": "末端定位精度",
+        "points": 10,
+        "max": 10
+      },
+      {
+        "name": "任务完成",
+        "points": 10,
+        "max": 10
+      }
+    ]
+  },
+  "render_mode": "2D",
+  "main_has_fruit_link": true,
+  "page_errors": []
+}

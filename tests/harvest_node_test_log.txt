@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: same seed returns same coordinates and 8 ripe 4 unripe
+ok 1 - same seed returns same coordinates and 8 ripe 4 unripe
+  ---
+  duration_ms: 2.5216
+  type: 'test'
+  ...
+# Subtest: unripe protection rejects harvesting before IK
+ok 2 - unripe protection rejects harvesting before IK
+  ---
+  duration_ms: 0.468384
+  type: 'test'
+  ...
+# Subtest: IK and trajectory follow all contact waypoints with <1e-4 m error
+ok 3 - IK and trajectory follow all contact waypoints with <1e-4 m error
+  ---
+  duration_ms: 2.804429
+  type: 'test'
+  ...
+# Subtest: full independent mission completes with no crop damage
+ok 4 - full independent mission completes with no crop damage
+  ---
+  duration_ms: 4.070086
+  type: 'test'
+  ...
+# Subtest: score varies with pick displacement and rejects invalid gripper
+ok 5 - score varies with pick displacement and rejects invalid gripper
+  ---
+  duration_ms: 6.915496
+  type: 'test'
+  ...
+# Subtest: failed IK for unreachable targets and deterministic report
+ok 6 - failed IK for unreachable targets and deterministic report
+  ---
+  duration_ms: 7.023782
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 82.448149

@@ -1,0 +1,9 @@
+# Use only data you have permission to train on; preserve original field/day splits.
+# Canonical class mapping required by the online runtime:
+path: /absolute/path/to/real_maize_weed_yolo
+train: images/train
+val: images/val
+test: images/test
+names:
+  0: crop
+  1: weed

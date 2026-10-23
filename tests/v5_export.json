@@ -1,0 +1,241 @@
+{
+  "schema": "edu.jlu.agribot.v5/result",
+  "version": "5.0",
+  "result": {
+    "student": "匿名",
+    "mission": "integrated",
+    "lesson": "实验4 · 五行自主作业综合考核",
+    "seed": 20261022,
+    "datetime": "2026-10-23T08:28:20.021Z",
+    "speed": 0.75,
+    "Kp": 1.3,
+    "lookahead": 1.1,
+    "turnRadius": 1.05,
+    "confidence": 0.35,
+    "sprayRadius": 0.35,
+    "backend": "fallback",
+    "detector": "demo",
+    "modelLoaded": false,
+    "modelInferenceFrames": 0,
+    "independentModelValidation": false,
+    "gradeType": "教学标签模式（非AI识别精度）",
+    "completed": true,
+    "aborted": false,
+    "elapsed": 111.4,
+    "rmse": 0.1231,
+    "maxError": 0.2522,
+    "visionValidPct": 89.3,
+    "turns": 4,
+    "turnExitError": 0.0547,
+    "turnArcError": 9.896,
+    "maxStep": 0.0375,
+    "weedDetected": 55,
+    "weedHit": 45,
+    "totalWeeds": 55,
+    "cropSprayRisk": 53,
+    "TP": 55,
+    "FP": 43,
+    "FN": 0,
+    "TN": 177,
+    "precision": 0.5612,
+    "recall": 1,
+    "F1": 0.719,
+    "score": 73,
+    "rubric": [
+      {
+        "label": "任务完成",
+        "max": 20,
+        "earned": 20,
+        "note": "5行4次转弯"
+      },
+      {
+        "label": "视觉导航误差",
+        "max": 20,
+        "earned": 11.79,
+        "note": "0.123 m"
+      },
+      {
+        "label": "连续掉头",
+        "max": 15,
+        "earned": 15,
+        "note": "4/4"
+      },
+      {
+        "label": "分类F1",
+        "max": 20,
+        "earned": 14.38,
+        "note": "0.72"
+      },
+      {
+        "label": "杂草命中率",
+        "max": 15,
+        "earned": 12.27,
+        "note": "45/55"
+      },
+      {
+        "label": "作物保护",
+        "max": 10,
+        "earned": 0,
+        "note": "风险53"
+      }
+    ],
+    "advanced": {
+      "advancedEnabled": false,
+      "physics": "deterministic traction-limited kinematic approximation, NOT rigid-body contact",
+      "obstacles": [
+        {
+          "id": "rock-1",
+          "kind": "rock",
+          "x": 0.23331841989420354,
+          "z": 1.8,
+          "r": 0.1,
+          "h": 0.25
+        }
+      ],
+      "planner": null,
+      "safetyEvents": [],
+      "steeringAngle": 0.01807669231788639,
+      "wheelSlipEstimated": 0,
+      "actualSpeed": 0,
+      "priorityQueue": [
+        "safety",
+        "visual_navigation",
+        "spraying"
+      ],
+      "sprayRetries": 0,
+      "arm": {
+        "joints": [
+          0,
+          0,
+          0
+        ],
+        "tool": {
+          "x": 0,
+          "y": 1.14,
+          "z": 1.03
+        },
+        "gripperClosed": false
+      },
+      "spray": {
+        "sprayCount": 0,
+        "failed": 0,
+        "cropSafetyBlocks": 0,
+        "appliedL": 0,
+        "remainingL": 12,
+        "pending": 0,
+        "delayS": 0.35,
+        "radiusM": 0.35
+      },
+      "pointCloud": null,
+      "rosbridge": "disconnected",
+      "trajectoryFrames": 0
+    }
+  },
+  "advanced": {
+    "advancedEnabled": false,
+    "physics": "deterministic traction-limited kinematic approximation, NOT rigid-body contact",
+    "obstacles": [
+      {
+        "id": "rock-1",
+        "kind": "rock",
+        "x": 0.23331841989420354,
+        "z": 1.8,
+        "r": 0.1,
+        "h": 0.25
+      }
+    ],
+    "planner": null,
+    "safetyEvents": [],
+    "steeringAngle": 0.01807669231788639,
+    "wheelSlipEstimated": 0,
+    "actualSpeed": 0,
+    "priorityQueue": [
+      "safety",
+      "visual_navigation",
+      "spraying"
+    ],
+    "sprayRetries": 0,
+    "arm": {
+      "joints": [
+        0,
+        0,
+        0
+      ],
+      "tool": {
+        "x": 0,
+        "y": 1.14,
+        "z": 1.03
+      },
+      "gripperClosed": false
+    },
+    "spray": {
+      "sprayCount": 0,
+      "failed": 0,
+      "cropSafetyBlocks": 0,
+      "appliedL": 0,
+      "remainingL": 12,
+      "pending": 0,
+      "delayS": 0.35,
+      "radiusM": 0.35
+    },
+    "pointCloud": null,
+    "rosbridge": "disconnected",
+    "trajectoryFrames": 0
+  },
+  "events": [
+    "111.4s · 实验4 · 五行自主作业综合考核 已完成；得分 73",
+    "105.7s · 教学检测误报：对作物触发喷施",
+    "103.1s · 教学检测误报：对作物触发喷施",
+    "99.7s · 教学检测误报：对作物触发喷施",
+    "98.7s · 教学检测误报：对作物触发喷施",
+    "97.9s · 教学检测误报：对作物触发喷施",
+    "97.1s · 教学检测误报：对作物触发喷施",
+    "96.2s · 教学检测误报：对作物触发喷施",
+    "92.6s · 本实验完成第 4 次连续掉头；末端横向误差 0.055 m",
+    "88.2s · 进入地头，规划半径 1.05 m，前后轮反相转向",
+    "84.2s · 教学检测误报：对作物触发喷施",
+    "81.7s · 教学检测误报：对作物触发喷施",
+    "80.8s · 教学检测误报：对作物触发喷施",
+    "78.2s · 教学检测误报：对作物触发喷施",
+    "74.8s · 教学检测误报：对作物触发喷施",
+    "72.1s · 教学检测误报：对作物触发喷施",
+    "69.4s · 本实验完成第 3 次连续掉头；末端横向误差 0.011 m",
+    "65.0s · 进入地头，规划半径 1.05 m，前后轮反相转向",
+    "63.8s · 教学检测误报：对作物触发喷施",
+    "59.4s · 教学检测误报：对作物触发喷施",
+    "57.5s · 教学检测误报：对作物触发喷施",
+    "56.9s · 教学检测误报：对作物触发喷施",
+    "55.0s · 教学检测误报：对作物触发喷施",
+    "54.9s · 教学检测误报：对作物触发喷施",
+    "54.3s · 教学检测误报：对作物触发喷施",
+    "54.1s · 教学检测误报：对作物触发喷施",
+    "51.6s · 教学检测误报：对作物触发喷施",
+    "50.7s · 教学检测误报：对作物触发喷施",
+    "48.9s · 教学检测误报：对作物触发喷施",
+    "48.9s · 教学检测误报：对作物触发喷施",
+    "46.2s · 本实验完成第 2 次连续掉头；末端横向误差 0.076 m",
+    "41.8s · 进入地头，规划半径 1.05 m，前后轮反相转向",
+    "41.3s · 教学检测误报：对作物触发喷施",
+    "40.5s · 教学检测误报：对作物触发喷施",
+    "39.7s · 教学检测误报：对作物触发喷施",
+    "37.8s · 教学检测误报：对作物触发喷施",
+    "36.2s · 教学检测误报：对作物触发喷施",
+    "35.3s · 教学检测误报：对作物触发喷施",
+    "32.7s · 教学检测误报：对作物触发喷施",
+    "30.9s · 教学检测误报：对作物触发喷施",
+    "30.0s · 教学检测误报：对作物触发喷施",
+    "25.7s · 教学检测误报：对作物触发喷施",
+    "23.1s · 本实验完成第 1 次连续掉头；末端横向误差 0.141 m",
+    "18.7s · 进入地头，规划半径 1.05 m，前后轮反相转向",
+    "15.7s · 教学检测误报：对作物触发喷施",
+    "13.9s · 教学检测误报：对作物触发喷施",
+    "12.3s · 教学检测误报：对作物触发喷施",
+    "8.7s · 教学检测误报：对作物触发喷施",
+    "8.6s · 教学检测误报：对作物触发喷施",
+    "7.9s · 教学检测误报：对作物触发喷施",
+    "7.9s · 教学检测误报：对作物触发喷施",
+    "0.1s · 教学检测误报：对作物触发喷施",
+    "0.0s · 任务重置：实验4 · 五行自主作业综合考核 · 种子 20261022；尚未开始评分"
+  ],
+  "trail": []
+}
